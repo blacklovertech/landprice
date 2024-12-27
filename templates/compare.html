@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Comparison</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Data Comparison</h1>
+
+        <!-- Data Unique to Government Dataset -->
+        <h2>Data Unique to Government Dataset</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Sub-Registrar-Office</th>
+                    <th>Village</th>
+                    <th>Street Name</th>
+                    <th>Land Classification</th>
+                    <th>Year</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in gov_unique %}
+                    <tr>
+                        <td>{{ record['Zone'] }}</td>
+                        <td>{{ record['Sub-Registrar-Office'] }}</td>
+                        <td>{{ record['Village'] }}</td>
+                        <td>{{ record['Street Name'] }}</td>
+                        <td>{{ record['Land Classification'] }}</td>
+                        <td>{{ record['Year'] }}</td>
+                        <td>{{ record['Price'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Data Unique to Prediction Dataset -->
+        <h2>Data Unique to Prediction Dataset</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Sub-Registrar-Office</th>
+                    <th>Village</th>
+                    <th>Street Name</th>
+                    <th>Land Classification</th>
+                    <th>Year</th>
+                    <th>Projected Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in prediction_unique %}
+                    <tr>
+                        <td>{{ record['Zone'] }}</td>
+                        <td>{{ record['Sub-Registrar-Office'] }}</td>
+                        <td>{{ record['Village'] }}</td>
+                        <td>{{ record['Street Name'] }}</td>
+                        <td>{{ record['Land Classification'] }}</td>
+                        <td>{{ record['Year'] }}</td>
+                        <td>{{ record['Projected Price'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Common Data with Price Difference -->
+        <h2>Common Data with Price Difference</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Sub-Registrar-Office</th>
+                    <th>Village</th>
+                    <th>Street Name</th>
+                    <th>Land Classification</th>
+                    <th>Year</th>
+                    <th>Price</th>
+                    <th>Projected Price</th>
+                    <th>Price Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in common_data %}
+                    <tr>
+                        <td>{{ record['Zone'] }}</td>
+                        <td>{{ record['Sub-Registrar-Office'] }}</td>
+                        <td>{{ record['Village'] }}</td>
+                        <td>{{ record['Street Name'] }}</td>
+                        <td>{{ record['Land Classification'] }}</td>
+                        <td>{{ record['Year'] }}</td>
+                        <td>{{ record['Price'] }}</td>
+                        <td>{{ record['Projected Price'] }}</td>
+                        <td>{{ record['Price Difference'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

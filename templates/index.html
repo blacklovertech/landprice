@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Home | Real Estate Insights</title>
+    <style>
+        /* Parallax Effect */
+        .hero-section {
+            position: relative;
+            background: url('static/images/real-estate.jpg') center/cover no-repeat fixed;
+            background-size: cover;
+            height: 100vh;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .hero-section .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .hero-section h1 {
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+        }
+        .hero-section p {
+            font-size: 1.25rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Real Estate Insights</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/market-insight">Market Insight</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about-us">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact-us">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/get-property">Get Property</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Parallax -->
+    <section class="hero-section">
+        <div class="overlay"></div>
+        <div class="container">
+            <h1 class="display-4 fw-bold">Invest Smart, Invest in Real Estate</h1>
+            <p class="lead">Your one-stop solution for smarter property investments.</p>
+            <a href="/market-insight" class="btn btn-light btn-lg mt-3" data-aos="zoom-in" data-aos-duration="1000">Explore Insights</a>
+        </div>
+    </section>
+
+    <!-- Features Section with AOS Animations -->
+    <section class="container my-5" data-aos="fade-up" data-aos-duration="1000">
+        <h2 class="text-center mb-4">Our Features</h2>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                    <div class="card-body">
+                        <h5 class="card-title">Market Insights</h5>
+                        <p class="card-text">Analyze the trends to make informed decisions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <i class="fas fa-bullseye fa-3x text-success mb-3"></i>
+                    <div class="card-body">
+                        <h5 class="card-title">Future Predictions</h5>
+                        <p class="card-text">See projected land prices to plan your investment.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <i class="fas fa-user-friends fa-3x text-warning mb-3"></i>
+                    <div class="card-body">
+                        <h5 class="card-title">User-Friendly</h5>
+                        <p class="card-text">Easy navigation and understanding of property details.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Get Property Section with Animation -->
+    <section class="bg-light py-5" data-aos="fade-up" data-aos-duration="1000">
+        <div class="container text-center">
+            <h2 class="unique-heading mb-4">Get Property at Your Fingertips</h2>
+            <p class="lead">Search and find your ideal property by location and classification.</p>
+            <a href="/get-property" class="btn btn-primary btn-lg mt-3">Start Searching</a>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="bg-light py-5" data-aos="fade-up" data-aos-duration="1000">
+        <div class="container text-center">
+            <h2 class="mb-4">What Our Clients Say</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 shadow-sm">
+                        <p>"This website helped me find the best investment properties with detailed market insights!"</p>
+                        <p>- John Doe</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 shadow-sm">
+                        <p>"I love the simplicity and ease of use. The predictions were spot on!"</p>
+                        <p>- Sarah Lee</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 shadow-sm">
+                        <p>"A great platform for property investments. Clear insights and accurate data."</p>
+                        <p>- Michael Smith</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2024 Real Estate Insights. All Rights Reserved.</p>
+        <div class="social-icons">
+            <a href="#" class="text-white mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Flask
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+SQLAlchemy
+requests
+gunicorn
+flask-cors
+jsonify
+render_template

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Get Property | Real Estate Predictions</title>
+    <style>
+        .hero-section {
+            background-image: url('/static/images/real-estate.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .form-section {
+            background-color: #f8f9fa;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-section {
+            margin-top: 30px;
+        }
+
+        .card {
+            margin: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Real Estate</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/market-insight">Market Insight</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about-us">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact-us">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/get-property">Get Property</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1>Find Your Ideal Property</h1>
+        <p>Search for properties based on your preferences</p>
+    </section>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-section">
+                    <form id="property-form">
+                        <div class="mb-3">
+                            <label for="sub_registrar_office" class="form-label">Sub Registrar Office:</label>
+                            <select id="sub_registrar_office" name="sub_registrar_office" class="form-select">
+                                <option value="">Select Sub Registrar Office</option>
+                                {% for office in sub_registrar_offices %}
+                                <option value="{{ office }}">{{ office }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="village" class="form-label">Village:</label>
+                            <select id="village" name="village" class="form-select" disabled>
+                                <option value="">Select Village</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="street_name" class="form-label">Street Name:</label>
+                            <select id="street_name" name="street_name" class="form-select" disabled>
+                                <option value="">Select Street Name</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Get Predicted Price</button>
+                    </ ```html
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-section">
+        <div class="row">
+            <div class="col-md-6">
+                <div id="gov_price_yearwise" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Government Price Year-wise</h5>
+                        <p class="card-text">Loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div id="predicted_price" class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Predicted Prices</h5>
+                        <p class="card-text">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section to display selected values -->
+    <div class="container mt-4">
+        <h5>Selected Values:</h5>
+        <p id="selected-values"></p>
+    </div>
+
+    <!-- Canvas for the graph -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="table-section">
+                    <button id="downloadChart" class="btn btn-secondary mt-2">Download Chart</button>
+                    <canvas id="priceChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sub_registrar_office').change(function () {
+                var office = $(this).val();
+                if (office) {
+                    $.ajax({
+                        url: '/get-villages',
+                        data: { sub_registrar_office: office },
+                        success: function (data) {
+                            $('#village').empty().append('<option value="">Select Village</option>');
+                            data.villages.forEach(function (village) {
+                                $('#village').append('<option value="' + village + '">' + village + '</option>');
+                            });
+                            $('#village').prop('disabled', false);
+                        },
+                        error: function () {
+                            console.error('Error fetching villages');
+                        }
+                    });
+                } else {
+                    $('#village').prop('disabled', true).empty().append('<option value="">Select Village</option>');
+                    $('#street_name').prop('disabled', true).empty().append('<option value="">Select Street Name</option>');
+                }
+            });
+
+            $('#village').change(function () {
+                var village = $(this).val();
+                var office = $('#sub_registrar_office').val();
+                if (village) {
+                    $.ajax({
+                        url: '/get-streets',
+                        data: { sub_registrar_office: office, village: village },
+                        success: function (data) {
+                            $('#street_name').empty().append('<option value="">Select Street Name</option>');
+                            data.streets.forEach(function (street) {
+                                $('#street_name').append('<option value="' + street + '">' + street + '</option>');
+                            });
+                            $('#street_name').prop('disabled', false);
+                        },
+                        error: function () {
+                            console.error('Error fetching streets');
+                        }
+                    });
+                } else {
+                    $('#street_name').prop('disabled', true).empty().append('<option value="">Select Street Name</option>');
+                }
+            });
+
+// Declare a variable to hold the chart instance
+let priceChart;
+
+function renderChart(avgPredictedPrices, avgGovPrices, selectedValues, village, subRegistrarOffice, streetName) {
+    var ctx = document.getElementById('priceChart').getContext('2d');
+
+    // Destroy the existing chart if it exists
+    if (priceChart) {
+        priceChart.destroy();
+    }
+
+    // Combine years and prices for the chart
+    var allYears = [...new Set([...Object.keys(avgGovPrices), ...Object.keys(avgPredictedPrices)])].sort(); // Unique years sorted
+    var allPredictedPrices = allYears.map(year => avgPredictedPrices[year] !== undefined ? avgPredictedPrices[year] : null); // Use null for missing years
+    var allGovPrices = allYears.map(year => avgGovPrices[year] !== undefined ? avgGovPrices[year] : null); // Use null for missing years
+
+    // Create a new chart instance
+    priceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: allYears,
+            datasets: [
+                {
+                    label: 'Predicted Prices - ' + village + ', ' + streetName + ', ' + subRegistrarOffice,
+                    data: allPredictedPrices,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                },
+                {
+                    label: 'Government Prices - ' + village + ', ' + streetName + ', ' + subRegistrarOffice,
+                    data: allGovPrices,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Year'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Price'
+                    }
+                }
+            },
+            plugins: {
+                zoom: {
+                    pan: {
+                        enabled: true,
+                        mode: 'xy'
+                    },
+                    zoom: {
+                        enabled: true,
+                        mode: 'xy'
+                    }
+                },
+                beforeDraw: function(chart) {
+                    var ctx = chart.ctx;
+                    ctx.save();
+                    ctx.font = '16px Arial';
+                    ctx.fillStyle = 'black';
+                    ctx.fillText(selectedValues, 10, 20); // Draw the selected values at the top left
+                    ctx.restore();
+                }
+            }
+        }
+    });
+
+    // Download chart as image
+    document.getElementById('downloadChart').addEventListener('click', function () {
+        var link = document.createElement('a');
+        link.href = priceChart.toBase64Image();
+        link.download = 'price_chart.png';
+        link.click();
+    });
+}
+
+// Update the form submission to include selected values
+$('#property-form').submit(function (event) {
+    event.preventDefault();
+    var streetName = $('#street_name').val();
+    var village = $('#village').val();
+    var subRegistrarOffice = $('#sub_registrar_office').val();
+
+    // Display selected values
+    var selectedValues = 'Sub Registrar Office: ' + subRegistrarOffice + ', Village: ' + village + ', Street Name: ' + streetName;
+    $('#selected-values').html(selectedValues);
+
+    if (streetName) {
+        $.ajax({
+            url: '/get-predicted-price',
+            data: {
+                sub_registrar_office: subRegistrarOffice,
+                village: village,
+                street_name: streetName
+            },
+            success: function (response) {
+                // Prepare data for predicted prices
+                var predictedYears = {};
+                if (Array.isArray(response.predicted_price) && response.predicted_price.length > 0) {
+                    var predictedPriceHtml = '<table class="table table-bordered"><thead><tr><th>Year</th><th>Projected Price</th></tr></thead><tbody>';
+                    response.predicted_price.forEach(function (price) {
+                        predictedPriceHtml += '<tr><td>' + price.Year + '</td><td>' + price['Projected Price'] + '</td></tr>';
+                        if (!predictedYears[price.Year]) {
+                            predictedYears[price.Year] = [];
+                        }
+                        predictedYears[price.Year].push(price['Projected Price']);
+                    });
+                    predictedPriceHtml += '</tbody></table>';
+                    $('#predicted_price .card-text').html(predictedPriceHtml);
+                } else {
+                    $('#predicted_price .card-text').html('<p>No predicted prices available for the selected filters.</p>');
+                }
+
+                // Prepare data for government prices
+                var govYears = {};
+                var govPriceHtml = '<table class="table table-bordered"><thead><tr><th>Year</th><th>Price</th></tr></thead><tbody>';
+                response.gov_price_yearwise.forEach(function (price) {
+                    govPriceHtml += '<tr><td>' + price.Year + '</td><td>' + price.Price + '</td></tr>';
+                    if (!govYears[price.Year]) {
+                        govYears[price.Year] = [];
+                    }
+                    govYears[price.Year].push(price.Price);
+                });
+                govPriceHtml += '</tbody></table>';
+                $('#gov_price_yearwise .card-text').html(govPriceHtml);
+
+                // Calculate average prices for predicted prices
+                var avgPredictedPrices = {};
+                for (var year in predictedYears) {
+                    avgPredictedPrices[year] = predictedYears[year].reduce((a, b) => a + b, 0) / predictedYears[year].length;
+                }
+
+                // Calculate average prices for government prices
+                var avgGovPrices = {};
+                for (var year in govYears) {
+                    avgGovPrices[year] = govYears[year].reduce((a, b) => a + b, 0) / govYears[year].length;
+                }
+
+                // Render the graph with selected values
+                renderChart(avgPredictedPrices, avgGovPrices, selectedValues, village, subRegistrarOffice, streetName);
+            },
+            error: function () {
+                $('#predicted_price .card-text').html('<p>Error fetching predicted prices.</p>');
+                $('#gov_price_yearwise .card-text').html('<p>Error fetching government prices.</p>');
+            }
+        });
+    }
+});
+
+      });
+    </script>
+
+</body>
+
+</html>
